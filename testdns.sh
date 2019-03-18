@@ -5,7 +5,6 @@ else
 	touch checkdns.log
 fi
 oldip=`cat checkdns.log`
-rm checkdns.log
 newip=`sh /root/testip.sh $1`
 if [ "$newip" = "" ]
 then
@@ -20,7 +19,10 @@ else
 	echo $1' is changed! changing route.'
 	if [ ! "$oldip" = "" ]
 	then
-		route del -host $oldip gw 172.19.172.253
+		#route del -host $oldip gw 172.19.172.253
+		sh /root/testroute.sh checkdns.log del
 	fi
-	route add -host $newip gw 172.19.172.253
+	#route add -host $newip gw 172.19.172.253
+	sh /root/testroute.sh 'ns'$1'.log' add
 fi
+rm checkdns.log
