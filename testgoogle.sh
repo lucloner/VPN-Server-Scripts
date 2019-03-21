@@ -29,6 +29,6 @@ else
 	echo vpn running done
 	expressvpn refresh
 fi
-sh /root/testddns.sh > testddns.log
 rm testgoogle.tag
+sh /root/testddns.sh > testddns.log
 echo test shutdown
