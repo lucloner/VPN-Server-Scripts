@@ -1,4 +1,5 @@
 #!/bin/sh
+echo nameserver 8.8.8.8 > /etc/resolv.conf
 start=$(cat /dev/urandom | head -n 10 | cksum | awk -F ' ' '{print $1}')
 start=`expr $start % 7`
 start="$start,\$p"

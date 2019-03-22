@@ -1,34 +1,41 @@
+#!/bin/sh
+ret=0
+testns(){
+	ret=0
+	ip=`sh /root/testip0.sh $1 8.8.8.8 | sed -n 1p`
+	ping -c 10 $ip
+	if [ $? -eq 0 ]
+	then
+		echo pingok
+		return 0
+	else
+		echo ping $1 failed vpn maybe off
+		expressvpn disconnect
+		sh /root/testvpn.sh > /root/testvpn.log
+		cat /root/testvpn.log
+		echo vpn running done
+		ret=1
+	fi
+}
+
 if [ -f "testgoogle.tag" ]
 then
 	echo test already running!
 	exit 1
 fi
 touch testgoogle.tag
-echo nameserver 8.8.8.8 > /etc/resolv.conf
-ping -c 10 www.google.com
-if [ $? -eq 0 ]
+testns www.google.com
+if [ $ret -eq 0 ]
 then
-	echo pingok
-	ping -c 10 t66y.com
-	if [ $? -eq 0 ]
+	if [ ! -f testt66y.tag ]
 	then
-        	echo pingok2
-		rm /root/testgoogle.log
+		touch testt66y.tag
 	else
-	        echo ping t66y failed vpn maybe off
-	        expressvpn disconnect
-	        sh /root/testvpn.sh > /root/testvpn.log
-	        cat /root/testvpn.log
-        	echo vpn running done
+		rm testt66y.tag
+		testns t66y.com
 	fi
-else
-	echo ping google failed vpn maybe off
-	expressvpn disconnect
-	sh /root/testvpn.sh > /root/testvpn.log
-	cat /root/testvpn.log
-	echo vpn running done
-	expressvpn refresh
 fi
+expressvpn refresh
 rm testgoogle.tag
 sh /root/testddns.sh > testddns.log
 echo test shutdown
