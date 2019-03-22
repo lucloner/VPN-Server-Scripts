@@ -1,6 +1,6 @@
 #!/bin/sh
 start=$(cat /dev/urandom | head -n 10 | cksum | awk -F ' ' '{print $1}')
-start=`expr $start % 52`
+start=`expr $start % 7`
 start="$start,\$p"
 sed -n $start vpnservers.lst | while read line
 do
