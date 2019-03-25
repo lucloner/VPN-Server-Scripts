@@ -80,6 +80,12 @@ testconn(){
 		echo '4:'$chk_vpn
 		return 1
 	fi
+	chk_vpn=`expressvpn status | grep 'Not connected'`
+	if [ ! -z "$chk_vpn" ]
+	then
+		echo '5:'$chk_vpn
+		return 5
+	fi
 	chk_vpn=`expressvpn status | grep 'onnect'`
 	if [ ! -z "$chk_vpn" ]
 	then
@@ -93,6 +99,7 @@ if [ -f "testgoogle.tag" ]
 then
 	echo test already running!
 	expressvpn diagnostics
+	sh /root/testddns.sh
 	exit 1
 fi
 touch testgoogle.tag
