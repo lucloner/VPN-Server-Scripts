@@ -1,4 +1,5 @@
 #!/bin/sh
+echo 'now:'`date`
 ret=0
 testns(){
 	ret=0
@@ -100,6 +101,7 @@ then
 	echo test already running!
 	expressvpn diagnostics
 	sh /root/testddns.sh
+	sh /root/testlog.sh
 	exit 1
 fi
 touch testgoogle.tag

@@ -1,4 +1,5 @@
 #!/bin/sh
+echo 'now:'`date`
 testdns(){
   if [ -f 'ns'$1'.log' ]
   then
@@ -7,7 +8,7 @@ testdns(){
   	touch checkdns.log
   fi
   oldip=`cat checkdns.log`
-  newip=`sh /root/testip.sh $1`
+  newip=`sh /root/testip.sh $1 ns1.oray.net`
   if [ "$newip" = "" ]
   then
   	echo $1' not resolved! do nothing.'
