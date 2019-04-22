@@ -71,6 +71,9 @@ do
     then
       echo failed!
     fi
+    thisroute=`route`
 	fi
 done
+echo $thisroute
+echo -----END-----
 exit 0
