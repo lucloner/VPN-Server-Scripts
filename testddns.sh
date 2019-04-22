@@ -1,5 +1,7 @@
 #!/bin/sh
 echo 'now:'`date`
+thisroute=`route`
+
 testdns(){
   if [ -f 'ns'$1'.log' ]
   then
@@ -8,15 +10,19 @@ testdns(){
   	touch checkdns.log
   fi
   oldip=`cat checkdns.log`
+  oldresult=`echo $thisroute | grep "$oldip"`
   newip=`sh /root/testip.sh $1 ns1.oray.net`
+  newresult=`echo $thisroute | grep "$newip"`
   if [ "$newip" = "" ]
   then
   	echo $1' not resolved! do nothing.'
+    newresult=$oldresult
   else
     echo 'oldip:'$oldip', newip:'$newip
     if [ "$oldip" = "$newip" ]
     then
     	echo $1' is not changed! do nothing.'
+      newresult=$oldresult
     else
     	echo $1' is changed! changing route.'
     	if [ ! "$oldip" = "" ]
@@ -27,6 +33,14 @@ testdns(){
     fi
   fi
   rm checkdns.log
+
+  if [ ! -z $newresult ]
+  then
+    echo route table checked ok!
+  else
+    echo route table checked lost! add it...
+    testroute 'ns'$1'.log' add
+  fi
 
   return $errno
 }
